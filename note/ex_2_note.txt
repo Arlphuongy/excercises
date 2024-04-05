@@ -1,0 +1,38 @@
+
+1. linear_search(self, arr, target):
+   - How it works: Linear search iterates through each element in the list until it finds the target value or reaches the end of the list. It compares each element with the target value until a match is found.
+   - Time Complexity: O(n) - Linear time complexity since in the worst case, the algorithm may need to iterate through all n elements in the list to find the target.
+   - Space Complexity: O(1) - Constant space complexity since the algorithm only uses a few extra variables regardless of the size of the input list.
+   - Performance: It is efficient for small lists but becomes increasingly inefficient as the size of the list grows due to its linear time complexity.
+
+2. binary_search(self, arr, target):
+   - How it works: Binary search divides the sorted list into two halves and compares the target value with the middle element. Based on the comparison, it eliminates one half of the list and continues searching in the remaining half until the target is found or the search interval becomes empty.
+   - Time Complexity: O(log n) - Logarithmic time complexity since the algorithm halves the search interval with each iteration.
+   - Space Complexity: O(1) - Constant space complexity since the algorithm only uses a few extra variables regardless of the size of the input list.
+   - Performance: It is efficient for large sorted lists as it reduces the search space exponentially with each iteration, leading to faster search times compared to linear search.
+
+3. bubble_sort(self, arr):
+   - How it works: Bubble sort repeatedly compares adjacent elements in the list and swaps them if they are in the wrong order. This process is repeated until the list is sorted.
+   - Time Complexity: O(n^2) - Quadratic time complexity since, in the worst case, it requires n iterations for each of the n elements in the list.
+   - Space Complexity: O(1) - Constant space complexity since the algorithm sorts the list in place without using additional memory proportional to the size of the input list.
+   - Performance: It is inefficient for large lists due to its quadratic time complexity. It is mainly used for educational purposes or for sorting small lists where simplicity is more important than efficiency.
+
+4. factorial(self, n):
+   - How it works: Factorial calculates the product of all positive integers from 1 to n. It iteratively multiplies each integer from 1 to n to calculate the factorial.
+   - Time Complexity: O(n) - Linear time complexity since it requires iterating through all integers from 1 to n.
+   - Space Complexity: O(1) - Constant space complexity since the algorithm only uses a few extra variables regardless of the size of n.
+   - Performance: It is efficient for small values of n but may encounter performance issues for very large values of n due to its linear time complexity.
+
+5. is_prime(self, n):
+   - How it works: is_prime checks whether a given number n is prime by checking divisibility from 2 up to the square root of n. If n is divisible by any number other than 1 and itself, it is not prime.
+   - Time Complexity: O(sqrt(n)) - Square root time complexity since it checks divisibility up to the square root of n.
+   - Space Complexity: O(1) - Constant space complexity since the algorithm only uses a few extra variables regardless of the size of n.
+   - Performance: It is efficient for checking primality of moderately large numbers due to its square root time complexity.
+
+6. fibonacci(self, n):
+   - How it works: Fibonacci generates the first n Fibonacci numbers iteratively by summing the last two numbers in the sequence.
+   - Time Complexity: O(n) - Linear time complexity since it requires iterating through the loop n times to generate the Fibonacci sequence.
+   - Space Complexity: O(n) - Linear space complexity since it stores the entire sequence of n Fibonacci numbers in a list.
+   - Performance: It is efficient for generating the first n Fibonacci numbers, but the space complexity grows linearly with n, so it may encounter memory issues for very large values of n.
+
+In summary, understanding the time and space complexities of algorithms is crucial for evaluating their performance and scalability. Each algorithm has its strengths and weaknesses, and choosing the appropriate algorithm depends on factors such as the size of the input data and the desired performance characteristics.

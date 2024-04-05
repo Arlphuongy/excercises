@@ -3,8 +3,10 @@
 import io
 import sys
 import unittest
-
+import os
 from ex_1 import BeginnerExercises
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 
 class TestBeginnerExercises(unittest.TestCase):
