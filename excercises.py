@@ -70,3 +70,37 @@ def bubble_sort(list):
     return list
 
 print(bubble_sort([5,3,2,4,1]))
+
+#write a function to calculate the factorial of a non-negative integer using an iterative method
+def factorial(n):
+    product = 1
+    for i in range(n):
+        product = product * (i+1)
+    return product
+
+print(factorial(5))
+
+#create a function to check if n is prime
+def is_prime(n):
+    if n < 2:
+        return False
+    for i in range(2, n):
+        if (n % i) == 0:
+            return False
+    return True
+    
+print(is_prime(7))
+
+#write a function that generates the first "n" fibonnaci numbers using iterative approach       
+def fibonacci(n):
+    if n == 0:
+        return False
+    elif n == 1: 
+        return 0
+    else:
+        list = [0, 1]
+        for i in range(2, n):
+            list.append(list[i-1] + list[i-2])
+        return list
+
+print(fibonacci(10))
