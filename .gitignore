@@ -1,1 +1,6 @@
 /test.py
+
+*cache*
+*.pyc
+venv
+env
