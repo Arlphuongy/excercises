@@ -2,11 +2,11 @@ import subprocess
 import pyautogui as pag
 import time
 
-#opening word application and giving it some time 
+#opening word application 
 process = subprocess.Popen("C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Word.lnk", shell=True)
 time.sleep(2)
 
-#opening the file we want
+#opening the file 
 pag.hotkey('alt', 'f')
 pag.press('o')
 pag.press('e')
