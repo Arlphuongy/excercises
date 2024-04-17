@@ -1,0 +1,20 @@
+To streamline the process of translating a large text file and reassembling it, follow these simplified steps:
+
+1. Split the Source Text File: Begin by dividing your source text file into multiple smaller files, each containing approximately 60,000 words. This makes them manageable for translation.
+
+2. Automate Translation: Utilize an automatic translation script to translate each of the smaller files you created in step 1. Save the translated files accordingly.
+
+3. Manual Translation for Setup: For the initial file, you may need to manually translate it to set the translation language and specify where the translated files should be saved. This step is crucial for setting up the process.
+
+4. Script for Automation (Optional): If you prefer not to manually translate the first file, consider writing a script that automates the selection of the translation language and the save location. You might need to adjust the script to wait longer during the first iteration to accommodate setup delays.
+
+5. Format the Output Files: Ensure that the output `.docx` files are formatted consistently. This is important for later extracting the content back into text files. Use the format `f"{path}/{basename}_t.docx"` for naming the translated documents.
+
+6. Reassemble Translated Files: When it's time to combine the translated files back into a single text file, the main challenge is to maintain the correct order and distinguish between the original and translated files. Thanks to the consistent `.docx` format, this should be straightforward.
+
+7. Use argparse for Reassembly: For the reassembly process, employ `argparse` to specify parameters such as language, input, and output sources without modifying the script. This approach offers flexibility for different translation projects. This command specifies the folder containing the files, the base filename, the original language (`en` for English), the translation language (`vi` for Vietnamese), and that both original and translated texts are to be processed.
+
+python util/assemble_words_file.py --folder_path "src/temp" --base_filename "dataset" --ori_lang "en" --tran_lang "vi" --translation "both"
+
+
+Convert your auto_translate and create_words_file code to apply argparse
