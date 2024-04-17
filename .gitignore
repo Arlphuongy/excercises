@@ -4,3 +4,6 @@
 *.pyc
 venv
 env
+*.docx
+*.doc
+.DS_store
