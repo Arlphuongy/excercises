@@ -10,23 +10,23 @@ time.sleep(2)
 pag.hotkey('alt', 'f')
 pag.press('o')
 pag.press('e')
-pag.write('test1')
+pag.write('dataset')
 time.sleep(2)
 pag.press('enter')
 
-#waiting for file to open
-time.sleep(2)
+# #waiting for file to open
+time.sleep(30)
 
-#translating the page
+# #translating the page
 pag.hotkey('alt', 'r')
 pag.press('l')
 pag.press('down')
 pag.press('enter')
 
-#waiting for file to finish translating
-time.sleep(10)
+# #waiting for file to finish translating
 
-#saving the page into src folder
+
+# #saving the page into src folder
 pag.hotkey('alt', 'f')
 pag.press('a')
 time.sleep(2)
@@ -37,13 +37,13 @@ pag.hotkey('alt', 'd')
 pag.write(r'C:\Users\ASUS\Desktop\Practice\src')
 pag.hotkey('alt', 's')
 
-#close window
+# #close window
 time.sleep(2)
 pag.hotkey('alt', 'f4')
 time.sleep(2)
 pag.hotkey('alt', 'f4')
 
-#task 1 and also extracting the doc into txt
+# #task 1 and also extracting the doc into txt
 time.sleep(3)
 import docx
 doc = docx.Document('src/translated_text.docx')
