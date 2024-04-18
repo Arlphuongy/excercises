@@ -1,4 +1,0 @@
-jieba
-nltk
-python-docx
-pyautogui

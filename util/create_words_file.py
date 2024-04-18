@@ -1,8 +1,8 @@
 import os
 from docx import Document
 import random
-
 import jieba
+import argparse
 from nltk.tokenize import word_tokenize, sent_tokenize
 
 
@@ -70,19 +70,41 @@ def extract_and_divide_into_docx(
 
 
 def main():
-    language = "en"
-    folder_path = "src"
-    base_filename = "dataset_zlib3_c_6"
-    filepath = f"{folder_path}/{base_filename}.txt"
-    output_path = "temp"
-    output_basename = "dataset"
+
+    parser = argparse.ArgumentParser(
+        description="splitting word documents"
+    )
+
+    parser.add_argument(
+        "--language", type=str, required=True, help="the language of the file"
+    )
+
+    parser.add_argument(
+        "--folder_path", type=str, required=True, help="the folder where file is located in"
+    )
+
+    parser.add_argument(
+        "--base_filename", type=str, required=True, help="the name of the file"
+    )
+
+    parser.add_argument(
+        "--output_path", type=str, required=True, help="the folder for all the output files"
+    )
+
+    parser.add_argument(
+        "--output_basename", type=str, required=True, help="the name for all the output files"
+    )
+
+    args = parser.parse_args()
+
+    filepath = f"{args.folder_path}/{args.base_filename}.txt"
 
     max_words_per_doc = random.randint(56789, 60606)
     # max_words_per_doc = random.randint(12345, 60606)
 
     # Analyze the file (optional, can be removed if not needed)
     total_lines, total_words, unique_word_count = read_and_analyze_file(
-        filepath, language
+        filepath, args.language
     )
     print(
         f"Total Lines: {total_lines}, Total Words: {total_words}, Unique Words: {unique_word_count}"
@@ -90,9 +112,10 @@ def main():
 
     # Extract lines and divide them into multiple docx files
     extract_and_divide_into_docx(
-        filepath, output_path, output_basename, max_words_per_doc, language
+        filepath, args.output_path, args.output_basename, max_words_per_doc, args.language
     )
 
+    
 
 if __name__ == "__main__":
     main()

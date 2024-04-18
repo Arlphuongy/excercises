@@ -5,6 +5,7 @@ import glob
 import re
 import subprocess
 import random
+import argparse
 
 
 def write_text(text, interval=0.0, next_key=None):
@@ -45,14 +46,15 @@ def universal_command(keys):
     if not 2 <= len(keys) <= 4:
         raise ValueError("The list of keys must contain between 2 and 4 elements.")
 
-    command_pressed = False
+    # command_pressed = False
+    alt_pressed = False
     ctrl_pressed = False
     shift_pressed = False
 
     for i, key in enumerate(keys):
-        if key == "command":
+        if key == "alt":
             pyautogui.keyDown(key)
-            command_pressed = True
+            alt_pressed = True
             time.sleep(0.1)
         elif key == "ctrl":
             pyautogui.keyDown(key)
@@ -66,8 +68,8 @@ def universal_command(keys):
             pyautogui.press(key)
             time.sleep(0.1)
 
-    if command_pressed:
-        pyautogui.keyUp("command")
+    if alt_pressed:
+        pyautogui.keyUp("alt")
     if ctrl_pressed:
         pyautogui.keyUp("ctrl")
     if shift_pressed:
@@ -94,41 +96,42 @@ def process_file(folder_path, file, retries=1):
     translation_filename = f"{base_filename}_t{extension}"
     start_time = time.time()
 
-    subprocess.call(["open", file])
+    subprocess.call(["start", "winword.exe", file], shell=True)
     time.sleep(1.5)
     time.sleep(1.5)
 
-    universal_command(["command", "ctrl", "f"])  # full screen
+    # universal_command(["command", "ctrl", "f"])  # full screen
 
     # open translation
-    click_at_position(515, 100, button="left", duration=0.25)
-    click_at_position(400, 130, button="left", duration=0.25)
-    click_at_position(400, 180, button="left", duration=0.25)
+    universal_command(["alt", "r"])
+    pyautogui.press('l')
+    pyautogui.press('down')
+    pyautogui.press('enter')
     time.sleep(1.5)
     time.sleep(1.5)
 
     # press translation button
-    click_at_position(2000, 390, button="left", duration=1.5)
+    # click_at_position(2000, 390, button="left", duration=1.5)
 
     # check if translation succeed
     translation_flag = is_button_present("_img/dictate_button.png", timeout=60)
 
     if translation_flag:
         time.sleep(0.5)
-        universal_command(["command", "s"])
+        universal_command(["ctrl", "s"])
 
         time.sleep(0.5)
         time.sleep(1.5)
         write_text(translation_filename, 0, "enter")
 
-        time.sleep(0.5)
-        universal_command(["command", "w"])
+        time.sleep(1.5)
+        universal_command(["alt", "f4"])
 
     else:
         print(f"Failed to tranlate {file}")
 
     time.sleep(0.5)
-    universal_command(["command", "w"])
+    universal_command(["alt", "f4"])
 
     processing_time = time.time() - start_time
     print(f"Processing time for {file}: {processing_time:.2f} seconds")
@@ -136,7 +139,7 @@ def process_file(folder_path, file, retries=1):
     if os.path.exists(os.path.join(folder_path, translation_filename)):
         print(f"Translation saved to {translation_filename}")
     else:
-        universal_command(["command", "w"])
+        # universal_command(["alt", "f4"])
         print(f"Failed to save translation for {file}")
         if retries > 0:
             print(f"Retrying... {retries} attempts left")
@@ -161,6 +164,7 @@ def process_files(folder_path, base_filename):
     docx_files = glob.glob(docx_pattern)
     docx_files = [f for f in docx_files if not f.endswith("_t.docx")]
     docx_files.sort(key=numerical_sort_key)
+    # print(docx_files)
 
     last_processed_index = get_last_processed_file_index(docx_files, folder_path)
 
@@ -182,11 +186,24 @@ def process_files(folder_path, base_filename):
 def main():
 
     # en/mixz2_s/dataset_zlib2_c_1_sentence_1.docx
-    folder_path = "src/temp"
-    base_filename = "dataset"
 
-    process_files(folder_path, base_filename)
+    # folder_path = "src/temp"
+    # base_filename = "dataset"
 
+    parser = argparse.ArgumentParser(
+        description="translating the files"
+    )
+
+    parser.add_argument(
+        "--folder_path", type=str, required=True, help="the folder files are located in"
+    )
+    parser.add_argument(
+        "--base_filename", type=str, required=True, help="name for the files"
+    )
+
+    args = parser.parse_args()
+
+    process_files(args.folder_path, args.base_filename)
 
 if __name__ == "__main__":
     main()

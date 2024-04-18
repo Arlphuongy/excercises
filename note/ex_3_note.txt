@@ -16,5 +16,7 @@ To streamline the process of translating a large text file and reassembling it, 
 
 python util/assemble_words_file.py --folder_path "src/temp" --base_filename "dataset" --ori_lang "en" --tran_lang "vi" --translation "both"
 
-
 Convert your auto_translate and create_words_file code to apply argparse
+
+py .\util\create_words_file.py --language "en" --folder_path "src" --base_filename "dataset_zlib3_c_6" --output_path "temp" --output_basename "dataset"
+python util/auto_translate.py --folder_path "src/temp" --base_filename "dataset" 
