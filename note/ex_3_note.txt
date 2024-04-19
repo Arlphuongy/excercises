@@ -14,9 +14,9 @@ To streamline the process of translating a large text file and reassembling it, 
 
 7. Use argparse for Reassembly: For the reassembly process, employ `argparse` to specify parameters such as language, input, and output sources without modifying the script. This approach offers flexibility for different translation projects. This command specifies the folder containing the files, the base filename, the original language (`en` for English), the translation language (`vi` for Vietnamese), and that both original and translated texts are to be processed.
 
-python util/assemble_words_file.py --folder_path "src/temp" --base_filename "dataset" --ori_lang "en" --tran_lang "vi" --translation "both"
 
 Convert your auto_translate and create_words_file code to apply argparse
 
-py .\util\create_words_file.py --language "en" --folder_path "src" --base_filename "dataset_zlib3_c_6" --output_path "temp" --output_basename "dataset"
+python util/create_words_file.py --language "en" --folder_path "src" --base_filename "dataset_zlib3_c_6" --output_path "temp" --output_basename "dataset"
 python util/auto_translate.py --folder_path "src/temp" --base_filename "dataset" 
+python util/assemble_words_file.py --folder_path "src/temp" --base_filename "dataset" --ori_lang "en" --tran_lang "vi" --translation "both"

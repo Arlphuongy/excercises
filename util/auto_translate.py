@@ -21,7 +21,7 @@ def is_button_present(button_image_src, timeout=30):
     start_time = time.time()
     while time.time() - start_time < timeout:
         try:
-            button_location = pyautogui.locateOnScreen(button_image_src, confidence=0.6)
+            button_location = pyautogui.locateOnScreen(button_image_src, confidence=0.66)
             if button_location:
                 print(f"\tButton found at {button_location}.")
                 return True
@@ -104,8 +104,11 @@ def process_file(folder_path, file, retries=1):
 
     # open translation
     universal_command(["alt", "r"])
+    time.sleep(0.5)
     pyautogui.press('l')
+    time.sleep(0.5)
     pyautogui.press('down')
+    time.sleep(0.5)
     pyautogui.press('enter')
     time.sleep(1.5)
     time.sleep(1.5)
@@ -114,14 +117,14 @@ def process_file(folder_path, file, retries=1):
     # click_at_position(2000, 390, button="left", duration=1.5)
 
     # check if translation succeed
-    translation_flag = is_button_present("_img/dictate_button.png", timeout=60)
+    translation_flag = is_button_present("img/dictate_button.png", timeout=60)
 
     if translation_flag:
-        time.sleep(0.5)
+        time.sleep(1.5)
         universal_command(["ctrl", "s"])
 
-        time.sleep(0.5)
         time.sleep(1.5)
+        time.sleep(2.5)
         write_text(translation_filename, 0, "enter")
 
         time.sleep(1.5)

@@ -99,7 +99,7 @@ def main():
 
     filepath = f"{args.folder_path}/{args.base_filename}.txt"
 
-    max_words_per_doc = random.randint(56789, 60606)
+    max_words_per_doc = random.randint(34567, 56789)
     # max_words_per_doc = random.randint(12345, 60606)
 
     # Analyze the file (optional, can be removed if not needed)
