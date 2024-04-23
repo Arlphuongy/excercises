@@ -9,16 +9,16 @@ from nltk.tokenize import word_tokenize, sent_tokenize
 def read_and_analyze_file(filepath, lang):
     total_lines = 0
     total_words = 0
-    unique_words = set()
+    unique_word_count = set()
 
     with open(filepath, "r", encoding="utf-8") as file:
         for line in file:
             total_lines += 1
             words = word_tokenize(line) if lang != "zh" else list(jieba.cut(line))
             total_words += len(words)
-            unique_words.update(words)
+            unique_word_count.update(words)
 
-    return total_lines, total_words, len(unique_words)
+    return total_lines, total_words, len(unique_word_count)
 
 
 def extract_and_divide_into_docx(
