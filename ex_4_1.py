@@ -106,27 +106,24 @@ def fetch_netflix_movie_links(cur_driver, cur_wait):
     clean_netflix_links("src/netflix_film_links.txt", "src/netflix_film_links_c.txt")
 
 
-# # Load environment variables from .env file
-# load_dotenv()
+# Load environment variables from .env file
+load_dotenv()
 
-# # Access variables securely
-# email = os.getenv("EMAIL")
-# password = os.getenv("PASSWORD")
+# Access variables securely
+email = os.getenv("EMAIL")
+password = os.getenv("PASSWORD")
 
-# options = webdriver.ChromeOptions()
-# # options.add_extension("../Language-Reactor.crx")qq
-# options.add_argument("--ignore-certificate-errors")
-# driver = webdriver.Chrome(options=options)
-# wait = WebDriverWait(driver, 10)
+options = webdriver.ChromeOptions()
+# options.add_extension("../Language-Reactor.crx")qq
+options.add_argument("--ignore-certificate-errors")
+driver = webdriver.Chrome(options=options)
+wait = WebDriverWait(driver, 10)
 
-# driver.get("https://www.netflix.com/login")
+driver.get("https://www.netflix.com/login")
 
-# if login(driver, email, password):
-#     # click_profile(driver, wait)
-#     time.sleep(2)
-#     fetch_netflix_movie_links(driver, wait)
+if login(driver, email, password):
+    # click_profile(driver, wait)
+    time.sleep(2)
+    fetch_netflix_movie_links(driver, wait)
 
-# driver.quit()
-
-
-clean_netflix_links("src/netflix_film_links.txt", "src/netflix_film_links_c.txt")
+driver.quit()
