@@ -1,0 +1,3 @@
+Run this command from root folder to install necessary requirements:
+
+pip install -r requirements.txt

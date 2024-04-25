@@ -2,3 +2,4 @@ jieba
 nltk
 python-docx
 pyautogui
+python-dotenv

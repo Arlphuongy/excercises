@@ -7,3 +7,6 @@ env
 *.docx
 *.doc
 .DS_store
+
+.env
+.vscode
