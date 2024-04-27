@@ -49,7 +49,6 @@ def navigate_movie_links(driver, wait, file_path):
 
 # def save_translation():
 
-
 def adjust_lang_settings(driver, wait):  
     try:
         settings = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="appMountPoint"]/div/div/div[1]/div/div[1]/div[1]/div[6]')))
@@ -72,9 +71,7 @@ def adjust_lang_settings(driver, wait):
         print("Exceeded timeout")
     except NoSuchElementException:
         print("Element not found")
-    
-    return True
-    
+        
 def export(wait):
     try: 
         export = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="appMountPoint"]/div/div/div[1]/div/div[1]/div[1]/div[5]')))
