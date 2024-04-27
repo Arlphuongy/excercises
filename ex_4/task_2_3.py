@@ -1,4 +1,6 @@
 import time
+import os
+from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -72,12 +74,16 @@ def extract_links(driver, wait):
             formatted_links.append(link)
     return formatted_links
 
+load_dotenv()
+email = os.getenv("EMAIL")
+password = os.getenv("PASSWORD")
+
 service = Service(executable_path="C:\Program Files (x86)\chromedriver.exe")
 driver = webdriver.Chrome(service=service)
 wait = WebDriverWait(driver, 10)
 driver.get("https://www.netflix.com/login")
 
-if login(driver, "lehongthai2000@gmail.com", "Netfl1x13122000@@&&"):
+if login(driver, email, password):
     click_profile(driver, wait)
     click_film_choose_genre(driver, wait)
     formatted_links = extract_links(driver, wait)
