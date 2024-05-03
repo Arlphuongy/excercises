@@ -11,7 +11,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 # from selenium.webdriver.common.action_chains import ActionChains
-from selenium.common.exceptions import NoSuchElementException, TimeoutException, StaleElementReferenceException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException, StaleElementReferenceException, NoSuchWindowException
 
 def login(driver, wait, email, password):
     try:
@@ -36,29 +36,37 @@ def navigate_movie_links(driver, wait, links_file, index, attempts):
     with open(links_file, 'r') as f:
         lines = [line.strip('\n') for line in f.readlines()]
 
-    for i, link in enumerate(lines, start=index):
+    for i, link in enumerate(lines[index:100]):
         driver.get(link)
         wait.until(EC.url_contains('watch'))
 
         try: 
             adjust_lang_settings(driver, wait)
-            export(wait)
-
+            export(wait)        
+            tabs = driver.window_handles
+            driver.switch_to.window(tabs[1])
             wait.until(EC.presence_of_element_located((By.TAG_NAME, 'tbody')))
-            if savetranslation(driver, i):
-                print("Saved translation and original subtitles files")
-            pag.hotkey('ctrl', 'w') 
+            if savetranslation(driver):
+                print("Saved translation and original subtitles into files")    
+                continue
+            #not finisheddddddddddd
 
-        except (TimeoutException, NoSuchElementException, StaleElementReferenceException):
+        except (TimeoutException, NoSuchElementException, StaleElementReferenceException, NoSuchWindowException):
+
             if attempts > 0:
                 print(f"Failed to process link {link} at index {i}. Retrying...")
                 navigate_movie_links(driver, wait, links_file, i, attempts - 1)
             else:
                 print(f"Failed to process link {link} at index {i} after 2 attempts")
-                driver.quit()         
+                driver.quit()    
+
+        else:
+            pag.hotkey('ctrl', 'w') 
 
 
-def savetranslation(driver, index):
+
+
+def savetranslation(driver):
     html = driver.page_source
     soup = BeautifulSoup(html, 'html.parser')
 
@@ -69,24 +77,31 @@ def savetranslation(driver, index):
 
     folder_path = 'ex_4/files/'
 
-    for tr in trs:
-        second_td = tr.find_all('td')[1]
-        third_td = tr.find_all('td')[2]
+    try: 
+        for tr in trs:
+            second_td = tr.find_all('td')[1]
+            third_td = tr.find_all('td')[2]
 
-        tran_text = second_td.get_text()
-        ori_text = third_td.get_text()
+            tran_text = second_td.get_text()
+            ori_text = third_td.get_text()
 
-        tran_subs.append(tran_text)
-        ori_subs.append(ori_text)
+            tran_subs.append(tran_text)
+            ori_subs.append(ori_text)
+
+    except NoSuchWindowException:
+        print("something happened trying to save subtitles")
+        return False
     
-    with open(f'{folder_path}tran_subs_{index}.txt', 'w') as f:
-        for text in tran_subs:
-            f.write(text + '\n')
+    else:
+        with open(f'{folder_path}tran_subs.txt', 'w', encoding='utf-8') as f:
+            for text in tran_subs:
+                f.write(text + '\n')
 
-    with open(f'{folder_path}ori_subs_{index}.txt', 'w') as f:
-        for text in ori_subs:
-            f.write(text + '\n')
-    return True
+        with open(f'{folder_path}ori_subs.txt', 'w', encoding='utf-8') as f:
+            for text in ori_subs:
+                f.write(text + '\n')
+                
+        return True
 
 def adjust_lang_settings(driver, wait):  
     settings = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="appMountPoint"]/div/div/div[1]/div/div[1]/div[1]/div[6]')))
