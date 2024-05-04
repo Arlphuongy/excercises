@@ -51,6 +51,8 @@ def navigate_movie_links(driver, wait, links_file, index, attempts):
                 navigate_movie_links(driver, wait, links_file, i, attempts - 1)
             else:
                 print(f"Failed to process link {link} at index {i} after 2 attempts")
+                with open('ex_4/files/failed_links.txt', 'a') as f:
+                    f.write(link)
                 driver.quit()    
     
     driver.quit()
@@ -71,15 +73,17 @@ def savetranslation(driver):
 
     folder_path = 'ex_4/files/'
 
-    for tr in trs:
+    for tr in trs[2:-2]:
         second_td = tr.find_all('td')[1]
         third_td = tr.find_all('td')[2]
 
         tran_text = second_td.get_text()
-        ori_text = third_td.get_text(strip=True)
-
         tran_lines = [line.strip() for line in tran_text.split('\n') if line.strip()]
         tran_text = '\n'.join(tran_lines)
+
+        ori_text = third_td.get_text().replace('\n', ' ')
+        ori_lines = [line.strip() for line in ori_text.split('\n') if line.strip()]
+        ori_text = '\n'.join(ori_lines)
 
         tran_subs.append(tran_text)
         ori_subs.append(ori_text)
@@ -95,7 +99,6 @@ def savetranslation(driver):
     print("Saved translation and original subtitles into files")  
     pag.hotkey('ctrl', 'w') 
     driver.switch_to.window(tabs[0])
-
             
 
 def adjust_lang_settings(driver, wait):  
@@ -106,7 +109,6 @@ def adjust_lang_settings(driver, wait):
     dropdown.click()
 
     dropdown_input = wait.until(EC.visibility_of_element_located((By.XPATH, '/html/body/span/span/span[1]/input')))
-    # dropdown_input = driver.find_element(By.XPATH, '/html/body/span/span/span[1]/input')
     dropdown_input.send_keys("Vietnamese" + Keys.RETURN)
 
     close = driver.find_element(By.XPATH, '//*[@id="lln-options-modal"]/div/div[4]/div')
