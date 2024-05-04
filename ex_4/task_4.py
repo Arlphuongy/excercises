@@ -10,7 +10,6 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-# from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException, TimeoutException, StaleElementReferenceException, NoSuchWindowException
 
 def login(driver, wait, email, password):
@@ -42,14 +41,8 @@ def navigate_movie_links(driver, wait, links_file, index, attempts):
 
         try: 
             adjust_lang_settings(driver, wait)
-            export(wait)        
-            tabs = driver.window_handles
-            driver.switch_to.window(tabs[1])
-            wait.until(EC.presence_of_element_located((By.TAG_NAME, 'tbody')))
-            if savetranslation(driver):
-                print("Saved translation and original subtitles into files")    
-                continue
-            #not finisheddddddddddd
+            export(wait)  
+            savetranslation(driver)
 
         except (TimeoutException, NoSuchElementException, StaleElementReferenceException, NoSuchWindowException):
 
@@ -59,14 +52,15 @@ def navigate_movie_links(driver, wait, links_file, index, attempts):
             else:
                 print(f"Failed to process link {link} at index {i} after 2 attempts")
                 driver.quit()    
-
-        else:
-            pag.hotkey('ctrl', 'w') 
-
-
+    
+    driver.quit()
 
 
 def savetranslation(driver):
+    tabs = driver.window_handles
+    driver.switch_to.window(tabs[1])
+    wait.until(EC.presence_of_element_located((By.TAG_NAME, 'tbody')))
+    
     html = driver.page_source
     soup = BeautifulSoup(html, 'html.parser')
 
@@ -77,31 +71,32 @@ def savetranslation(driver):
 
     folder_path = 'ex_4/files/'
 
-    try: 
-        for tr in trs:
-            second_td = tr.find_all('td')[1]
-            third_td = tr.find_all('td')[2]
+    for tr in trs:
+        second_td = tr.find_all('td')[1]
+        third_td = tr.find_all('td')[2]
 
-            tran_text = second_td.get_text()
-            ori_text = third_td.get_text()
+        tran_text = second_td.get_text()
+        ori_text = third_td.get_text(strip=True)
 
-            tran_subs.append(tran_text)
-            ori_subs.append(ori_text)
+        tran_lines = [line.strip() for line in tran_text.split('\n') if line.strip()]
+        tran_text = '\n'.join(tran_lines)
 
-    except NoSuchWindowException:
-        print("something happened trying to save subtitles")
-        return False
+        tran_subs.append(tran_text)
+        ori_subs.append(ori_text)
+
+    with open(f'{folder_path}tran_subs.txt', 'a', encoding='utf-8') as f: 
+        for text in tran_subs:
+            f.write(text + '\n')
+
+    with open(f'{folder_path}ori_subs.txt', 'a', encoding='utf-8') as f: 
+        for text in ori_subs:
+            f.write(text + '\n')
     
-    else:
-        with open(f'{folder_path}tran_subs.txt', 'w', encoding='utf-8') as f:
-            for text in tran_subs:
-                f.write(text + '\n')
+    print("Saved translation and original subtitles into files")  
+    pag.hotkey('ctrl', 'w') 
+    driver.switch_to.window(tabs[0])
 
-        with open(f'{folder_path}ori_subs.txt', 'w', encoding='utf-8') as f:
-            for text in ori_subs:
-                f.write(text + '\n')
-                
-        return True
+            
 
 def adjust_lang_settings(driver, wait):  
     settings = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="appMountPoint"]/div/div/div[1]/div/div[1]/div[1]/div[6]')))
@@ -138,6 +133,7 @@ password = os.getenv("PASSWORD")
 extension_path = './extensions/Language-Reactor.crx'
 options = Options()
 options.add_extension(extension_path)
+options.add_argument("--mute-audio")
 driver = webdriver.Chrome(options=options)
 wait = WebDriverWait(driver, 10)
 
