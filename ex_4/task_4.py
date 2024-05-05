@@ -35,12 +35,13 @@ def navigate_movie_links(driver, wait, links_file, index, attempts):
     with open(links_file, 'r') as f:
         lines = [line.strip('\n') for line in f.readlines()]
 
-    for i, link in enumerate(lines[index:100]):
+    for link in lines[index:100]:
+        i = lines.index(link)
         driver.get(link)
         wait.until(EC.url_contains('watch'))
 
         try: 
-            adjust_lang_settings(driver, wait)
+            adjust_lang_settings(driver, wait, link, i, links_file)
             export(wait)  
             savetranslation(driver)
 
@@ -52,9 +53,9 @@ def navigate_movie_links(driver, wait, links_file, index, attempts):
             else:
                 print(f"Failed to process link {link} at index {i} after 2 attempts")
                 with open('ex_4/files/failed_links.txt', 'a') as f:
-                    f.write(link)
-                driver.quit()    
-    
+                    f.write(link + '\n')
+                navigate_movie_links(driver, wait, links_file, i + 1, 2)
+   
     driver.quit()
 
 
@@ -74,10 +75,13 @@ def savetranslation(driver):
     folder_path = 'ex_4/files/'
 
     for tr in trs[2:-2]:
+        
         second_td = tr.find_all('td')[1]
         third_td = tr.find_all('td')[2]
 
-        tran_text = second_td.get_text()
+        character_spans = [span.get_text() for span in second_td.find_all('span') if span.parent.name != 'div']
+
+        tran_text = ' '.join(character_spans) #second_td.get_text()
         tran_lines = [line.strip() for line in tran_text.split('\n') if line.strip()]
         tran_text = '\n'.join(tran_lines)
 
@@ -88,11 +92,11 @@ def savetranslation(driver):
         tran_subs.append(tran_text)
         ori_subs.append(ori_text)
 
-    with open(f'{folder_path}tran_subs.txt', 'a', encoding='utf-8') as f: 
+    with open(f'{folder_path}tran_subs.txt', 'w', encoding='utf-8') as f: #change to 'a' later on
         for text in tran_subs:
             f.write(text + '\n')
 
-    with open(f'{folder_path}ori_subs.txt', 'a', encoding='utf-8') as f: 
+    with open(f'{folder_path}ori_subs.txt', 'w', encoding='utf-8') as f: 
         for text in ori_subs:
             f.write(text + '\n')
     
@@ -101,16 +105,25 @@ def savetranslation(driver):
     driver.switch_to.window(tabs[0])
             
 
-def adjust_lang_settings(driver, wait):  
+def adjust_lang_settings(driver, wait, link, index, links_file):  
     settings = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="appMountPoint"]/div/div/div[1]/div/div[1]/div[1]/div[6]')))
     settings.click()
 
     dropdown = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="select2-lln-NSL-dropdown-container"]')))
     dropdown.click()
+    try:
+        dropdown_input = wait.until(EC.visibility_of_element_located((By.XPATH, '/html/body/span/span/span[1]/input')))
+        dropdown_input.send_keys("Simplified Chinese") 
 
-    dropdown_input = wait.until(EC.visibility_of_element_located((By.XPATH, '/html/body/span/span/span[1]/input')))
-    dropdown_input.send_keys("Vietnamese" + Keys.RETURN)
+        lang_select = wait.until(EC.visibility_of_element_located((By.XPATH, "//span[contains(text(), 'Simplified Chinese')]")))  
 
+    except:
+        print(f"Failed to translate link {link} at index {index}")
+        with open('ex_4/files/no_translation.txt', 'a') as f:
+            f.write(link + '\n')
+        navigate_movie_links(driver, wait, links_file, index + 1, 2)
+
+    lang_select.click()
     close = driver.find_element(By.XPATH, '//*[@id="lln-options-modal"]/div/div[4]/div')
     close.click()
 
@@ -150,3 +163,5 @@ def main():
 
 if login(driver, wait, email, password):
     main()
+
+
