@@ -10,8 +10,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import NoSuchElementException, TimeoutException, StaleElementReferenceException, NoSuchWindowException
-
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
+# from selenium.common.exceptions import NoSuchElementException, TimeoutException, StaleElementReferenceException, NoSuchWindowException, UnexpectedAlertPresentException
 def login(driver, wait, email, password):
     try:
         email_field = driver.find_element(By.NAME, "userLoginId")
@@ -20,7 +20,6 @@ def login(driver, wait, email, password):
         email_field.send_keys(email)
         password_field.send_keys(password + Keys.RETURN)
 
-        #click profile
         wait.until(EC.url_contains('browse'))
         profile = driver.find_element(By.CSS_SELECTOR, 'a[data-uia="action-select-profile+primary"]')
         profile.click()
@@ -36,25 +35,31 @@ def navigate_movie_links(driver, wait, links_file, index, attempts):
         lines = [line.strip('\n') for line in f.readlines()]
 
     for link in lines[index:100]:
-        i = lines.index(link)
-        driver.get(link)
-        wait.until(EC.url_contains('watch'))
-
         try: 
-            adjust_lang_settings(driver, wait, link, i, links_file)
+            i = lines.index(link)
+            driver.get(link)
+            wait.until(EC.url_contains('watch'))
+
+            adjust_lang_settings(driver, wait, links_file, i, attempts, link)
             export(wait)  
             savetranslation(driver)
 
-        except (TimeoutException, NoSuchElementException, StaleElementReferenceException, NoSuchWindowException):
-
+        # except (TimeoutException, NoSuchElementException, StaleElementReferenceException, NoSuchWindowException, UnexpectedAlertPresentException):
+        except Exception:
             if attempts > 0:
                 print(f"Failed to process link {link} at index {i}. Retrying...")
                 navigate_movie_links(driver, wait, links_file, i, attempts - 1)
+
             else:
                 print(f"Failed to process link {link} at index {i} after 2 attempts")
+                i += 1
                 with open('ex_4/files/failed_links.txt', 'a') as f:
                     f.write(link + '\n')
-                navigate_movie_links(driver, wait, links_file, i + 1, 2)
+                navigate_movie_links(driver, wait, links_file, i, 2)
+            
+        else:
+            print(f"Saved {link} at index {i} into translation and original subtitles files") 
+            attempts = 2 
    
     driver.quit()
 
@@ -92,40 +97,42 @@ def savetranslation(driver):
         tran_subs.append(tran_text)
         ori_subs.append(ori_text)
 
-    with open(f'{folder_path}tran_subs.txt', 'w', encoding='utf-8') as f: #change to 'a' later on
+    with open(f'{folder_path}tran_subs.txt', 'a', encoding='utf-8') as f: #change to 'a' later on
         for text in tran_subs:
             f.write(text + '\n')
 
-    with open(f'{folder_path}ori_subs.txt', 'w', encoding='utf-8') as f: 
+    with open(f'{folder_path}ori_subs.txt', 'a', encoding='utf-8') as f: 
         for text in ori_subs:
             f.write(text + '\n')
     
-    print("Saved translation and original subtitles into files")  
     pag.hotkey('ctrl', 'w') 
     driver.switch_to.window(tabs[0])
             
 
-def adjust_lang_settings(driver, wait, link, index, links_file):  
-    settings = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="appMountPoint"]/div/div/div[1]/div/div[1]/div[1]/div[6]')))
-    settings.click()
+def adjust_lang_settings(driver, wait, links_file, i, attempts, link): 
 
-    dropdown = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="select2-lln-NSL-dropdown-container"]')))
-    dropdown.click()
-    try:
+    try: 
+        settings = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="appMountPoint"]/div/div/div[1]/div/div[1]/div[1]/div[6]')))
+        settings.click()
+
+        dropdown = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="select2-lln-NSL-dropdown-container"]')))
+        dropdown.click()
         dropdown_input = wait.until(EC.visibility_of_element_located((By.XPATH, '/html/body/span/span/span[1]/input')))
         dropdown_input.send_keys("Simplified Chinese") 
 
-        lang_select = wait.until(EC.visibility_of_element_located((By.XPATH, "//span[contains(text(), 'Simplified Chinese')]")))  
+        WebDriverWait(driver, 6).until(EC.visibility_of_element_located((By.XPATH, "//span[contains(text(), 'Simplified Chinese')]"))) 
+
+        dropdown_input.send_keys(Keys.RETURN)
 
     except:
-        print(f"Failed to translate link {link} at index {index}")
+        print(f"Failed to translate link {link} at index {i}")
         with open('ex_4/files/no_translation.txt', 'a') as f:
             f.write(link + '\n')
-        navigate_movie_links(driver, wait, links_file, index + 1, 2)
-
-    lang_select.click()
-    close = driver.find_element(By.XPATH, '//*[@id="lln-options-modal"]/div/div[4]/div')
-    close.click()
+        navigate_movie_links(driver, wait, links_file, i + 1, attempts)
+    
+    else:
+        close = driver.find_element(By.XPATH, '//*[@id="lln-options-modal"]/div/div[4]/div')
+        close.click()
 
 
 def export(wait):
@@ -135,10 +142,10 @@ def export(wait):
     export = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="appMountPoint"]/div/div/div[1]/div/div[1]/div[1]/div[5]')))
     export.click()
 
-    time.sleep(1)
-
     export_btn = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "#llnExportModalExportBtn")))
     export_btn.click()
+
+    wait.until(EC.number_of_windows_to_be(2))
 
 
 load_dotenv()
