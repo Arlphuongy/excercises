@@ -39,12 +39,11 @@ def login(email, password):
         return False
 
 
-def navigate_movie_links(links_file, start, end, en_file, zh_file):
-    with open(links_file, "r") as f:
+def navigate_movie_links(links_file, start, end, en_file, zh_file, folder_path):
+    with open(links_file, "r", encoding="utf-8") as f:
         lines = [line.strip("\n") for line in f.readlines()]
 
     for i in range(start, end + 1):
-
         link = lines[i]
         start_time = time.time()
 
@@ -52,7 +51,7 @@ def navigate_movie_links(links_file, start, end, en_file, zh_file):
             driver.get(link)
             wait.until(EC.url_contains("watch"))
 
-            if adjust_lang_settings(i, link):
+            if adjust_lang_settings(i, link, folder_path):
                 export()
                 savetranslation(en_file, zh_file)
                 end_time = time.time()
@@ -61,7 +60,7 @@ def navigate_movie_links(links_file, start, end, en_file, zh_file):
 
         except Exception:
             print(f"Failed to process link {link} at index {i}")
-            with open("ex_4/files/failed_links.txt", "a") as f:
+            with open(f"{folder_path}failed_links.txt", "a", encoding="utf-8") as f:
                 f.write(link + "\n")
 
 
@@ -74,12 +73,10 @@ def savetranslation(en_file, zh_file):
     soup = BeautifulSoup(html, "html.parser")
 
     trs = soup.find_all("tr")
-
     tran_subs = []
     ori_subs = []
 
     for tr in trs[2:-2]:
-
         second_td = tr.find_all("td")[1]
         third_td = tr.find_all("td")[2]
 
@@ -112,8 +109,7 @@ def savetranslation(en_file, zh_file):
     driver.switch_to.window(tabs[0])
 
 
-def adjust_lang_settings(i, link):
-
+def adjust_lang_settings(i, link, folder_path):
     try:
         settings = wait.until(
             EC.element_to_be_clickable(
@@ -150,9 +146,9 @@ def adjust_lang_settings(i, link):
 
         dropdown_input.send_keys(Keys.RETURN)
 
-    except:
-        print(f"Failed to translate link {link} at index {i}")
-        with open("ex_4/files/no_translation.txt", "a") as f:
+    except Exception as e:
+        print(f"Failed to translate link {link} at index {i} with error {e}")
+        with open(f"{folder_path}no_translation.txt", "a", encoding="utf-8") as f:
             f.write(link + "\n")
 
     else:
@@ -191,10 +187,10 @@ load_dotenv()
 email = os.getenv("EMAIL")
 password = os.getenv("PASSWORD")
 
-extension_path = "./extensions/Language-Reactor.crx"
+extension_path = "src/extensions/Language-Reactor.crx"
 options = Options()
 options.add_extension(extension_path)
-options.add_argument("--mute-audio")
+options.add_argument("--mute-audio")  # giỏi hihi
 driver = webdriver.Chrome(options=options)
 wait = WebDriverWait(driver, 10)
 
@@ -228,13 +224,15 @@ def main():
 
     args = parser.parse_args()
 
-    folder_path = "ex_4/files/subtitles/"
+    folder_path = "src/netflix/zh/"
     en_file = f"{folder_path}en_{args.start}-{args.end}.txt"
     zh_file = f"{folder_path}zh_{args.start}-{args.end}.txt"
 
-    links_file = "ex_4/files/netflix_links_c.txt"
+    links_file = "src/netflix_film_links_c.txt"
     login(email, password)
-    navigate_movie_links(links_file, args.start, args.end, en_file, zh_file)
+    navigate_movie_links(
+        links_file, args.start, args.end, en_file, zh_file, folder_path
+    )
     driver.quit()
 
 
@@ -247,3 +245,7 @@ if __name__ == "__main__":
     # py ex_4/extract_subtitles.py --start "751" --end "1000"
     # py ex_4/extract_subtitles.py --start "1001" --end "1250"
     # py ex_4/extract_subtitles.py --start "1251" --end "1500"
+
+    # python ex_4/extract_subtitles.py --start "4001" --end "4100"
+    # python ex_4/extract_subtitles.py --start "4101" --end "4200"
+    # python ex_4/extract_subtitles.py --start "4201" --end "4201"
