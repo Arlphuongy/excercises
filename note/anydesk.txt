@@ -6,4 +6,4 @@ nvtop
 MEM: 75% - 90%
 
 data
-https://drive.google.com/drive/folders/1PxQhmOM9VjZtJOpbQJQmcu22krxYAI1Y?usp=sharing  
+https://drive.google.com/drive/folders/1PxQhmOM9VjZtJOpbQJQmcu22krxYAI1Y?usp=sharing
