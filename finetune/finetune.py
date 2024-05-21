@@ -25,7 +25,7 @@ TARGET_LANG = "en"
 
 # Load dataset and metric for evaluation (BLEU score)
 # raw_datasets = load_dataset(f"Eugenememe/mix-{SOURCE_LANG}-{TARGET_LANG}-1m")
-raw_datasets = load_dataset("arlzphuong/mix-zh-en-500k")
+raw_datasets = load_dataset("arlzphuong/mix-en-zh-500k")
 metric = evaluate.load("sacrebleu")
 
 # MODEL_CHECKPOINT = f"Eugenememe/netflix-{SOURCE_LANG}-{TARGET_LANG}"
