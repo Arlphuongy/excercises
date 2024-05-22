@@ -1,0 +1,52 @@
+Model: weights/ct2fast-mix-zh-en-1m
+1.   <zh> 中等长度文本：我喜欢读书，因为它能让我学到很多知识。
+     <en> Medium-long text: I like to read because it allows me to learn a lot.
+
+2.   <zh> 长文本：昨天我去了超市买了很多东西，有水果、蔬菜和一些日用品。
+     <en> Long text: Yesterday I went to the supermarket to buy a lot of things, including fruits, vegetables and some daily necessities.
+
+3.   <zh> 长文本：他每天早上六点起床，然后去公园跑步，这已经成了他的习惯。
+     <en> Long text: It has become his habit for him to get up at six o'clock in the morning and then go to the park for a run.
+
+4.   <zh> 中等长度文本：这个周末我打算和朋友去海边度假。
+     <en> Medium length text: I plan to go to the beach with my friends this weekend for vacation.
+
+5.   <zh> 长文本：我们班的同学都很友好，每次遇到困难，大家都会互相帮助。
+     <en> Long text: The students in our class are very friendly, and every time they encounter difficulties, everyone will help each other.
+
+6.   <zh> 长文本：在公司工作了三年之后，我决定换个环境，挑战自己，寻找新的发展机会。
+     <en> Long Text: After working for three years, I decided to change the environment, challenge myself, and find new development opportunities.
+
+7.   <zh> 昨天晚上我在家里做了一顿丰盛的晚餐，有红烧肉、清蒸鱼、炒青菜和鸡蛋汤。家人们都说很好吃，吃得非常开心。饭后我们一起看了一部电影，然后聊了很多有趣的话题，度过了一个愉快的夜晚。
+     <en> Last night, I made a sumptuous dinner at home, with braised pork, steamed fish, stir-fried green vegetables and egg soup. Everyone said it was delicious and very happy. We watched a movie together after dinner, and then talked about a lot of interesting topics and had a pleasant night.
+
+8.   <zh> 在大学期间，我参加了很多社团活动，其中最让我印象深刻的是一次志愿者活动。我们去了一个偏远的山区，为那里的孩子们带去了书本和文具，并教他们一些简单的知识。虽然条件艰苦，但孩子们纯真的笑容让我们感到非常温暖。
+     <en> I went to a remote mountainous area, brought books and stationery to the children there, and taught them some simple knowledge. Although the conditions were difficult, the innocent smiles of the children made us feel very warm.
+
+9.   <zh> 每年的春天，我都会和家人一起去郊外踏青。我们会带上食物和饮料，找一个风景优美的地方，铺上一块大毯子，然后坐下来享受大自然的美景。大家在一起聊天、玩游戏，尽情享受春天的温暖和美好。
+     <en> Every spring, I go to the countryside with my family. We bring food and drinks, find a beautiful scenery, lay a blanket, and then sit down to enjoy the beautiful scenery of nature.
+
+10.  <zh> 他是一位非常出色的科学家，一生致力于研究新型能源的开发。他的研究成果不仅在国内获得了很高的评价，还在国际上引起了广泛的关注。许多年轻的科学家都以他为榜样，希望能像他一样为社会做出贡献。
+     <en> He is a very good scientist who has devoted his life to the development of new energy sources. His research results have not only been highly praised in China, but also attracted widespread attention in the world.
+
+11.  <zh> 我一直梦想着能有一次说走就走的旅行。背上背包，带上相机，去一个陌生的地方，探索那里的风土人情。沿途结识一些有趣的人，听他们讲述自己的故事，这样的经历一定会非常难忘。
+     <en> I've always dreamed of a trip that I can walk around. I'm going to go to a strange place with a backpack on my back, and I'm going to explore my customs.
+
+12.  <zh> 城市的夜晚总是那么繁华。街道两旁的霓虹灯闪烁，人们在各式各样的餐馆和商店里进进出出。走在街头，感受着喧嚣和热闹，有时会让我觉得自己仿佛置身于一个不夜城，充满了无限的活力和魅力。
+     <en> The night in the city is always so prosperous. The neon lights on both sides of the street are shining, people go in and out in all kinds of restaurants and shops. Walking on the streets, feeling hustle and bustle, sometimes it makes me feel like I'm in a city of no sleep, full of infinite vitality and charm.
+
+13.  <zh> 他从小就对音乐有着浓厚的兴趣。无论是钢琴、小提琴还是吉他，他都能演奏得非常出色。每当有音乐会，他都会积极参与，并且多次在比赛中获得奖项。现在，他已经成为一名职业音乐家，经常在世界各地巡演，受到观众的热烈欢迎。
+     <en> He's been interested in music since he was a child, and he can play very well, whether it's piano, violin, or guitar. Whenever there is a concert, he will actively participate and win awards in many competitions.
+
+14.  <zh> 自从开始学习编程，我发现自己对计算机科学产生了极大的兴趣。每次解决一个难题，都会让我有一种成就感。我希望通过不断的努力，未来能成为一名优秀的软件工程师，为社会的发展贡献自己的力量。
+     <en> Since I started programming, I've found myself interested in computer science. Every time I solve a problem, it gives me a sense of accomplishment. I hope that through continuous efforts, I can become an excellent software engineer in the future and contribute to the development of society.
+
+15.  <zh> 她是一位非常热心的老师，总是耐心地解答学生们的疑问。在她的课堂上，大家不仅能学到知识，还能感受到她对教育事业的热爱。很多学生都说，她不仅是他们的老师，更是他们的朋友和榜样。
+     <en> She is a very enthusiastic teacher who always patiently answers students' questions. In her classroom, everyone can not only learn knowledge, but also feel her love for education.
+
+16.  <zh> 在一个宁静的午后，我喜欢泡上一杯茶，坐在阳台上读一本好书。阳光透过窗户洒进来，微风轻拂，书页在指间翻动，仿佛时间都静止了。这种简单而美好的时光，让我感到无比的满足和幸福。
+     <en> On a quiet afternoon, I like to make a cup of tea and sit on the balcony and read a good book. The sun shines through the window, the breeze blows gently, and the pages are flipping between my fingers, as if time is still.
+
+Translation time: 2.702s
+================================================================================
+
