@@ -2,12 +2,10 @@ import pyautogui
 import time
 import os
 import glob
-
 import re
 import subprocess
 import random
 import argparse
-
 
 def write_text(text, interval=0.0, next_key=None):
     pyautogui.write(text, interval=interval)  # write text
@@ -22,7 +20,7 @@ def is_button_present(button_image_src, timeout=30):
     start_time = time.time()
     while time.time() - start_time < timeout:
         try:
-            button_location = pyautogui.locateOnScreen(button_image_src, confidence=0.66)
+            button_location = pyautogui.locateOnScreen(button_image_src, confidence=0.7)
             if button_location:
                 print(f"\tButton found at {button_location}.")
                 return True
@@ -116,9 +114,8 @@ def process_file(folder_path, file, retries=1):
 
     # press translation button
     # click_at_position(2000, 390, button="left", duration=1.5)
-
     # check if translation succeed
-    translation_flag = is_button_present("img/dictate_button.png", timeout=60)
+    translation_flag = is_button_present("img\dictate_button.png", timeout=30)
 
     if translation_flag:
         time.sleep(1.5)

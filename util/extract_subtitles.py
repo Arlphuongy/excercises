@@ -31,7 +31,7 @@ def login(email, password):
         return False
     
 
-def navigate_movie_links(links_file, start, end, en_file, zh_file):
+def navigate_movie_links(links_file, start, end, en_file, tran_file):
 
     with open(links_file, 'r') as f:
         lines = [line.strip('\n') for line in f.readlines()]
@@ -47,18 +47,18 @@ def navigate_movie_links(links_file, start, end, en_file, zh_file):
 
             if adjust_lang_settings(i, link):
                 export()  
-                savetranslation(en_file, zh_file)
+                savetranslation(en_file, tran_file)
                 end_time = time.time()
                 run_time = end_time - start_time
                 print(f"Saved {link} at index {i}, took {run_time} to complete") 
         
         except Exception:
             print(f"Failed to process link {link} at index {i}")
-            with open('ex_4/files/failed_links.txt', 'a') as f:
+            with open('ex_4/vn-en-netflix/failed_links.txt', 'a') as f:
                 f.write(link + '\n') 
 
 
-def savetranslation(en_file, zh_file):
+def savetranslation(en_file, tran_file):
     tabs = driver.window_handles
     driver.switch_to.window(tabs[1])
     wait.until(EC.presence_of_element_located((By.TAG_NAME, 'tbody')))
@@ -89,7 +89,7 @@ def savetranslation(en_file, zh_file):
         tran_subs.append(tran_text)
         ori_subs.append(ori_text)        
 
-    with open(zh_file, 'a', encoding='utf-8') as f:
+    with open(tran_file, 'a', encoding='utf-8') as f:
         for text in tran_subs:
             f.write(text + '\n')
 
@@ -111,15 +111,15 @@ def adjust_lang_settings(i, link):
         dropdown.click()
 
         dropdown_input = wait.until(EC.visibility_of_element_located((By.XPATH, '/html/body/span/span/span[1]/input')))
-        dropdown_input.send_keys("Simplified Chinese") 
+        dropdown_input.send_keys("Vietnamese") 
 
-        WebDriverWait(driver, 6).until(EC.visibility_of_element_located((By.XPATH, "//span[contains(text(), 'Simplified Chinese')]"))) 
+        WebDriverWait(driver, 6).until(EC.visibility_of_element_located((By.XPATH, "//span[contains(text(), 'Vietnamese')]"))) 
 
         dropdown_input.send_keys(Keys.RETURN)
 
     except: 
         print(f"Failed to translate link {link} at index {i}")
-        with open('ex_4/files/no_translation.txt', 'a') as f:
+        with open('ex_4/vn-en-netflix/no_translation.txt', 'a') as f:
             f.write(link + '\n')
     
     else:
@@ -182,38 +182,38 @@ def main():
 
     args = parser.parse_args()
 
-    folder_path = 'ex_4/files/subtitles/'
+    folder_path = 'ex_4/vn-en-netflix/subtitles_vn_en/'
     en_file = f"{folder_path}en_{args.start}-{args.end}.txt"
-    zh_file = f"{folder_path}zh_{args.start}-{args.end}.txt"
+    tran_file = f"{folder_path}vn_{args.start}-{args.end}.txt"
 
-    links_file = 'ex_4/files/netflix_links_c.txt'
+    links_file = 'ex_4/netflix_links_c.txt'
     login(email, password)
-    navigate_movie_links(links_file, args.start, args.end, en_file, zh_file)
+    navigate_movie_links(links_file, args.start, args.end, en_file, tran_file)
     driver.quit()
 
     
 if __name__ == "__main__":
     main()
 
-    # py ex_4/extract_subtitles.py --start "0" --end "250"
-    # py ex_4/extract_subtitles.py --start "251" --end "500"
-    # py ex_4/extract_subtitles.py --start "501" --end "750"
-    # py ex_4/extract_subtitles.py --start "751" --end "1000"
-    # py ex_4/extract_subtitles.py --start "1001" --end "1250"
-    
-    # py ex_4/extract_subtitles.py --start "1251" --end "1500"
-    #  py ex_4/extract_subtitles.py --start "1501" --end "1750"
-    # py ex_4/extract_subtitles.py --start "1751" --end "2000"
-    # py ex_4/extract_subtitles.py --start "2001" --end "2250" 
-    # py ex_4/extract_subtitles.py --start "2251" --end "2500"
-    #  py ex_4/extract_subtitles.py --start "2501" --end "2750"
-    # py ex_4/extract_subtitles.py --start "2751" --end "3000"
-    # py ex_4/extract_subtitles.py --start "3001" --end "3251"
+    # py util/extract_subtitles.py --start "0" --end "250"
+    # py util/extract_subtitles.py --start "251" --end "500"
+    # py util/extract_subtitles.py --start "501" --end "750"
+    # py util/extract_subtitles.py --start "751" --end "1000"
+    # py util/extract_subtitles.py --start "1001" --end "1250"
+    # py util/extract_subtitles.py --start "1251" --end "1500"
 
-    # py ex_4/extract_subtitles.py --start "3251" --end "3500"
-    # py ex_4/extract_subtitles.py --start "3501" --end "3750" 
-    # py ex_4/extract_subtitles.py --start "3751" --end "4000"
-    # py ex_4/extract_subtitles.py --start "4001" --end "4328"
+    #  py util/extract_subtitles.py --start "1501" --end "1750"
+    # py util/extract_subtitles.py --start "1751" --end "2000"
+    # py util/extract_subtitles.py --start "2001" --end "2250" 
+    # py util/extract_subtitles.py --start "2251" --end "2500"
+    #  py util/extract_subtitles.py --start "2501" --end "2750"
+    # py util/extract_subtitles.py --start "2751" --end "3000"
+    
+    # py util/extract_subtitles.py --start "3001" --end "3251"
+    # py util/extract_subtitles.py --start "3251" --end "3500"
+    # py util/extract_subtitles.py --start "3501" --end "3750" 
+    # py util/extract_subtitles.py --start "3751" --end "4000"
+    # py util/extract_subtitles.py --start "4001" --end "4328"
 
 
 

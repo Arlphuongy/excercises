@@ -119,3 +119,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+#python util/create_words_file.py --language "en" --folder_path "src" --base_filename "dataset_zlib" --output_path "temp" --output_basename "dataset"
